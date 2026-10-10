@@ -25,6 +25,13 @@ import {
 
 import { brevoKeyStatus, describeBrevoFailure } from "@/lib/brevo-key";
 
+/** Privacy: ask Brevo not to add open pixels or rewrite links for click tracking. */
+export const TRACKING_OFF_HEADERS = {
+  "X-Mailin-Track": "0",
+  "X-Mailin-Track-Opens": "0",
+  "X-Mailin-Track-Clicks": "0",
+} as const;
+
 const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 
 export interface MailOptions {
@@ -41,6 +48,11 @@ export interface MailOptions {
   tags?: string[];
   /** Bijlagen (bv. de PDF-factuur), base64-gecodeerd. */
   attachments?: { name: string; contentBase64: string }[];
+  /**
+   * Email-as-code: send our rendered `html` first and only fall back to the
+   * Brevo template cascade when that send is refused.
+   */
+  htmlFirst?: boolean;
   /** Internal: suppress admin alerts (used by the alert mail itself). */
   skipAdminAlert?: boolean;
   /** Ties every log line of one logical send together; generated when absent. */
@@ -270,6 +282,7 @@ export async function sendMail(opts: MailOptions): Promise<{ sent: boolean; erro
     ...(opts.subject ? { subject: opts.subject } : {}),
     ...(opts.params ? { params: opts.params } : {}),
     replyTo: opts.replyTo ?? defaultReplyTo(),
+    headers: TRACKING_OFF_HEADERS,
     ...(opts.tags ? { tags: opts.tags } : {}),
     ...(opts.attachments?.length
       ? {
@@ -316,10 +329,10 @@ export async function sendMail(opts: MailOptions): Promise<{ sent: boolean; erro
     });
   }
 
-  // 4 — inline HTML / plain text body rendered by us.
+  // 4 — inline HTML / plain text body rendered by us (first when htmlFirst).
   if (opts.html || opts.text) {
     const html = opts.html ?? `<pre>${opts.text}</pre>`;
-    attempts.push({
+    attempts[opts.htmlFirst && opts.html ? "unshift" : "push"]({
       label: "inline HTML fallback body",
       id: "inline",
       body: {
