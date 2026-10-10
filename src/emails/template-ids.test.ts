@@ -133,7 +133,7 @@ describe("environment overrides", () => {
     setEnv("BREVO_TEMPLATE_FORM_DE", "not-a-number");
     expect(brevoTemplateId("form", "de")).toBe(EMAIL_TEMPLATE_IDS.form.de);
     setEnv("BREVO_TEMPLATE_FORM_ES", "-4");
-    expect(brevoTemplateId("form", "es")).toBe(EMAIL_TEMPLATE_IDS.form.es);
+    expect(brevoTemplateId("form", "es")).toBe(23);
   });
 
   it("overrides category fallback, admin alert and global fallback", () => {

@@ -8,7 +8,7 @@
  * Uitzonderingen die echt zo in het Brevo-account staan:
  *  - Auth Magic Link NL is #93 (ID 12 was al bezet door de admin-notificatie).
  *  - De blokken factuur (#62), annulering (#72) en terugbetaling (#82) hebben
- *    voorlopig enkel NL/EN/FR/DE; de rest valt terug op NL.
+ *    voorlopig enkel NL/EN/FR/DE; de rest valt terug op EN.
  *  - Categorieën zonder template in Brevo staan op 0 → de mailer stuurt dan
  *    onze eigen inline HTML in plaats van een dood template-ID aan te spreken.
  */
@@ -90,13 +90,13 @@ export const BREVO_MAP = {
   },
 
   // Billing: factuur & geslaagde betaling (#62 – #71, enkel NL/EN/FR/DE gebouwd)
-  BILLING_INVOICE: { nl: 62, en: 63, fr: 64, de: 65, fallback: 62 },
+  BILLING_INVOICE: { nl: 62, en: 63, fr: 64, de: 65, fallback: 63 },
 
   // Billing: abonnement geannuleerd (#72 – #81, enkel NL/EN/FR/DE gebouwd)
-  BILLING_CANCELLED: { nl: 72, en: 73, fr: 74, de: 75, fallback: 72 },
+  BILLING_CANCELLED: { nl: 72, en: 73, fr: 74, de: 75, fallback: 73 },
 
   // Billing: terugbetaling & creditnota (#82 – #91, enkel NL/EN/FR/DE gebouwd)
-  BILLING_REFUND: { nl: 82, en: 83, fr: 84, de: 85, fallback: 82 },
+  BILLING_REFUND: { nl: 82, en: 83, fr: 84, de: 85, fallback: 83 },
 
   // ── Nog te bouwen in Brevo (0 = inline HTML uit de codebase) ───────────────
   VERIFICATION_APPROVED: { fallback: 0 },
