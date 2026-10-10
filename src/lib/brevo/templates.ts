@@ -34,46 +34,13 @@ export const BREVO_MAP = {
   },
 
   // Contact: bevestiging naar de bezoeker (#22 – #31)
-  CONTACT_CONFIRMATION: {
-    nl: 22,
-    en: 23,
-    fr: 24,
-    de: 25,
-    es: 26,
-    it: 27,
-    pt: 28,
-    pl: 29,
-    zh: 30,
-    fallback: 31,
-  },
+  CONTACT_CONFIRMATION: { nl: 22, en: 23, fr: 24, de: 25, fallback: 23 },
 
   // Billing: betaalbevestiging (#32 – #41)
-  BILLING_PAYMENT_SUCCESS: {
-    nl: 32,
-    en: 33,
-    fr: 34,
-    de: 35,
-    es: 36,
-    it: 37,
-    pt: 38,
-    pl: 39,
-    zh: 40,
-    fallback: 41,
-  },
+  BILLING_PAYMENT_SUCCESS: { nl: 32, en: 33, fr: 34, de: 35, fallback: 33 },
 
   // Billing: mislukte betaling / dunning (#42 – #51)
-  BILLING_PAYMENT_FAILED: {
-    nl: 42,
-    en: 43,
-    fr: 44,
-    de: 45,
-    es: 46,
-    it: 47,
-    pt: 48,
-    pl: 49,
-    zh: 50,
-    fallback: 51,
-  },
+  BILLING_PAYMENT_FAILED: { nl: 42, en: 43, fr: 44, de: 45, fallback: 43 },
 
   // Billing: verlenging abonnement (#52 – #61)
   BILLING_SUBSCRIPTION_RENEWAL: {
