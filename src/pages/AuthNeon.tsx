@@ -27,6 +27,8 @@ import { getEnabledProviders } from "@/lib/auth-providers.functions";
 import { Altcha } from "@/components/Altcha";
 import { AUTH_PROVIDERS, KEYED_PROVIDERS, FediverseDialog, ProviderMark } from "@/components/auth/ProviderKit";
 import { takeProof } from "@/lib/altcha-client";
+import { OtpInput } from "@/components/otp/OtpInput";
+import { redeemLoginCodeFn } from "@/lib/login-code.functions";
 
 /** Providers die via Better Auth's generic OAuth/OIDC-plugin lopen. */
 const GENERIC_OAUTH = new Set(["oidc", "infomaniak"]);
@@ -60,6 +62,29 @@ export default function AuthNeon({ initialMode = "magic" }: { initialMode?: Mode
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<Mode>(initialMode);
   const [sentTo, setSentTo] = useState<string | null>(null);
+  const [otp, setOtp] = useState("");
+  const [otpBusy, setOtpBusy] = useState(false);
+  const [otpInvalid, setOtpInvalid] = useState(false);
+  // Auto-submit: fires the moment the 6th digit is entered, no button.
+  const submitCode = async (code: string) => {
+    if (!sentTo || otpBusy) return;
+    setOtpBusy(true);
+    setOtpInvalid(false);
+    try {
+      const res = await redeemLoginCodeFn({ data: { email: sentTo, code } });
+      if (res.ok) {
+        window.location.assign(res.link);
+        return;
+      }
+      setOtpInvalid(true);
+      setOtp("");
+      toast.error(res.reason === "rate_limited" ? t("auth.code.tooMany") : t("auth.code.invalid"));
+    } catch (err) {
+      toast.error(errorMessage(err, t("auth.code.invalid")));
+    } finally {
+      setOtpBusy(false);
+    }
+  };
   const [loading, setLoading] = useState(false);
   const [fediverse, setFediverse] = useState<"bluesky" | "mastodon" | null>(null);
   const redirected = useRef(false);
@@ -358,11 +383,28 @@ export default function AuthNeon({ initialMode = "magic" }: { initialMode?: Mode
               <h2 className="font-display text-lg">{t("auth.sent.title")}</h2>
               <p className="mx-auto max-w-xs text-[13px] leading-relaxed text-muted-foreground">
                 {t("auth.sent.body1")}{" "}
-                <strong className="font-medium text-foreground">{sentTo}</strong>.
+                <strong className="font-medium text-foreground">{sentTo}</strong>
+                {t("auth.sent.body2")}
               </p>
+              <OtpInput
+                value={otp}
+                onChange={(v) => {
+                  setOtp(v);
+                  setOtpInvalid(false);
+                }}
+                onComplete={submitCode}
+                disabled={otpBusy}
+                invalid={otpInvalid}
+                autoFocus
+                ariaLabel={t("auth.code.label")}
+              />
+              {otpBusy ? <Loader2 className="mx-auto h-4 w-4 animate-spin text-muted-foreground" aria-hidden /> : null}
               <button
                 type="button"
-                onClick={() => setSentTo(null)}
+                onClick={() => {
+                  setSentTo(null);
+                  setOtp("");
+                }}
                 className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground"
               >
                 {t("auth.other")}

@@ -1235,5 +1235,8 @@
   "visits.space.root": "rout.be/…",
   "visits.subtitle": "Privacy-friendly counts — no personal data, no cookies.",
   "visits.title": "Visitors",
-  "visits.uniqueShort": "unique"
+  "visits.uniqueShort": "unique",
+  "auth.code.label": "Sign-in code",
+  "auth.code.invalid": "That code is wrong or has expired.",
+  "auth.code.tooMany": "Too many attempts. Wait a moment and try again."
 }

@@ -1235,5 +1235,8 @@
   "visits.space.root": "rout.be/…",
   "visits.subtitle": "Datenschutzfreundliche Zählung — keine personenbezogenen Daten, keine Cookies.",
   "visits.title": "Besucher",
-  "visits.uniqueShort": "eindeutig"
+  "visits.uniqueShort": "eindeutig",
+  "auth.code.label": "Anmeldecode",
+  "auth.code.invalid": "Der Code ist falsch oder abgelaufen.",
+  "auth.code.tooMany": "Zu viele Versuche. Warte kurz und versuche es erneut."
 }

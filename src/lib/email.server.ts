@@ -152,7 +152,25 @@ async function dispatch(input: SendLocalizedEmailInput): Promise<boolean> {
     const name = cap(input.payload?.name, 120);
     const subject = SUBJECTS[locale][intent];
     const { sendMail } = await import("@/emails/send.server");
+    let html: string | undefined;
+    if (intent === "magic-link" && link) {
+      try {
+        const [{ render }, { createElement }, { MagicLinkEmail }] = await Promise.all([
+          import("@react-email/render"),
+          import("react"),
+          import("@/emails/react/MagicLinkEmail"),
+        ]);
+        html = await render(
+          createElement(MagicLinkEmail, { locale, magic_link: link, otp_code: code || undefined, user_handle: name || undefined }),
+        );
+      } catch (err) {
+        // Render-fout → Brevo-template als vangnet.
+        console.error("[email] render failed, using Brevo template", err instanceof Error ? err.message : err);
+      }
+    }
     const result = await sendMail({
+      html,
+      htmlFirst: Boolean(html),
       to,
       subject,
       templateId: resolveTemplateId(intent, locale) || undefined,
