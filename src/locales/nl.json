@@ -1235,5 +1235,8 @@
   "visits.space.root": "rout.be/…",
   "visits.subtitle": "Privacyvriendelijke tellingen — geen persoonsgegevens, geen cookies.",
   "visits.title": "Bezoekers",
-  "visits.uniqueShort": "uniek"
+  "visits.uniqueShort": "uniek",
+  "auth.code.label": "Inlogcode",
+  "auth.code.invalid": "Die code klopt niet of is verlopen.",
+  "auth.code.tooMany": "Te veel pogingen. Wacht even en probeer opnieuw."
 }

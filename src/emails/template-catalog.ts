@@ -21,6 +21,12 @@ export interface CatalogEntry {
 
 export const TEMPLATE_CATALOG: CatalogEntry[] = [
   {
+    category: "subdomain_claim",
+    label: "Admin: subdomain root claim",
+    senders: ["src/routes/api/claim-root.ts"],
+    params: ["NAME", "EMAIL", "SUBDOMAIN"],
+  },
+  {
     category: "system",
     label: "Admin & system notifications",
     senders: ["src/lib/contact.server.ts → sendAdminNotification()"],

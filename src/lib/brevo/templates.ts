@@ -8,7 +8,7 @@
  * Uitzonderingen die echt zo in het Brevo-account staan:
  *  - Auth Magic Link NL is #93 (ID 12 was al bezet door de admin-notificatie).
  *  - De blokken factuur (#62), annulering (#72) en terugbetaling (#82) hebben
- *    voorlopig enkel NL/EN/FR/DE; de rest valt terug op NL.
+ *    voorlopig enkel NL/EN/FR/DE; de rest valt terug op EN.
  *  - Categorieën zonder template in Brevo staan op 0 → de mailer stuurt dan
  *    onze eigen inline HTML in plaats van een dood template-ID aan te spreken.
  */
@@ -34,46 +34,13 @@ export const BREVO_MAP = {
   },
 
   // Contact: bevestiging naar de bezoeker (#22 – #31)
-  CONTACT_CONFIRMATION: {
-    nl: 22,
-    en: 23,
-    fr: 24,
-    de: 25,
-    es: 26,
-    it: 27,
-    pt: 28,
-    pl: 29,
-    zh: 30,
-    fallback: 31,
-  },
+  CONTACT_CONFIRMATION: { nl: 22, en: 23, fr: 24, de: 25, fallback: 23 },
 
   // Billing: betaalbevestiging (#32 – #41)
-  BILLING_PAYMENT_SUCCESS: {
-    nl: 32,
-    en: 33,
-    fr: 34,
-    de: 35,
-    es: 36,
-    it: 37,
-    pt: 38,
-    pl: 39,
-    zh: 40,
-    fallback: 41,
-  },
+  BILLING_PAYMENT_SUCCESS: { nl: 32, en: 33, fr: 34, de: 35, fallback: 33 },
 
   // Billing: mislukte betaling / dunning (#42 – #51)
-  BILLING_PAYMENT_FAILED: {
-    nl: 42,
-    en: 43,
-    fr: 44,
-    de: 45,
-    es: 46,
-    it: 47,
-    pt: 48,
-    pl: 49,
-    zh: 50,
-    fallback: 51,
-  },
+  BILLING_PAYMENT_FAILED: { nl: 42, en: 43, fr: 44, de: 45, fallback: 43 },
 
   // Billing: verlenging abonnement (#52 – #61)
   BILLING_SUBSCRIPTION_RENEWAL: {
@@ -90,13 +57,13 @@ export const BREVO_MAP = {
   },
 
   // Billing: factuur & geslaagde betaling (#62 – #71, enkel NL/EN/FR/DE gebouwd)
-  BILLING_INVOICE: { nl: 62, en: 63, fr: 64, de: 65, fallback: 62 },
+  BILLING_INVOICE: { nl: 62, en: 63, fr: 64, de: 65, fallback: 63 },
 
   // Billing: abonnement geannuleerd (#72 – #81, enkel NL/EN/FR/DE gebouwd)
-  BILLING_CANCELLED: { nl: 72, en: 73, fr: 74, de: 75, fallback: 72 },
+  BILLING_CANCELLED: { nl: 72, en: 73, fr: 74, de: 75, fallback: 73 },
 
   // Billing: terugbetaling & creditnota (#82 – #91, enkel NL/EN/FR/DE gebouwd)
-  BILLING_REFUND: { nl: 82, en: 83, fr: 84, de: 85, fallback: 82 },
+  BILLING_REFUND: { nl: 82, en: 83, fr: 84, de: 85, fallback: 83 },
 
   // ── Nog te bouwen in Brevo (0 = inline HTML uit de codebase) ───────────────
   VERIFICATION_APPROVED: { fallback: 0 },

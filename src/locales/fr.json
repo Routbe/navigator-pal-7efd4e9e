@@ -1235,5 +1235,8 @@
   "visits.space.root": "rout.be/…",
   "visits.subtitle": "Comptages respectueux de la vie privée — aucune donnée personnelle, aucun cookie.",
   "visits.title": "Visiteurs",
-  "visits.uniqueShort": "uniques"
+  "visits.uniqueShort": "uniques",
+  "auth.code.label": "Code de connexion",
+  "auth.code.invalid": "Ce code est incorrect ou a expiré.",
+  "auth.code.tooMany": "Trop de tentatives. Patientez un instant."
 }

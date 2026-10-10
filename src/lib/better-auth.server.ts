@@ -171,11 +171,13 @@ export function createRoutAuth(request?: Request) {
         }
         // Alleen de centrale dienst: taal uit cookie/browser, nooit blokkerend of gooiend.
         const { sendLocalizedEmail, localeFromRequest } = await import("@/lib/email.server");
+        const { issueLoginCode } = await import("@/lib/login-code.server");
+        const code = await issueLoginCode(email, url);
         await sendLocalizedEmail({
           to: email,
           intent: "magic-link",
           locale: localeFromRequest(request),
-          payload: { link: url },
+          payload: { link: url, code: code ?? undefined },
         });
       },
     }),
