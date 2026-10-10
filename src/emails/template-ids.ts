@@ -65,6 +65,7 @@ export const EMAIL_CATEGORY_BASE = {
   payment: 62,
   cancellation: 72,
   refund: 82,
+  subdomain_claim: 2,
   transfer: 0,
   security: 0,
   merge: 0,
@@ -99,6 +100,8 @@ function block(base: number, languages: readonly EmailLanguage[]): LangMap {
 }
 
 const NINE = EMAIL_LANGUAGES;
+/** Blocks that only exist in NL/EN/FR/DE in Brevo; other languages fall back to EN. */
+const FOUR: readonly EmailLanguage[] = ["nl", "en", "fr", "de"];
 
 /** Verified Brevo template ID per category × language. */
 export const EMAIL_TEMPLATE_IDS: Record<EmailCategory, LangMap> = {
@@ -110,13 +113,14 @@ export const EMAIL_TEMPLATE_IDS: Record<EmailCategory, LangMap> = {
   reauthentication: AUTH_BLOCK,
   confirmation: AUTH_BLOCK,
   deletion: AUTH_BLOCK,
-  form: block(22, NINE),
-  payment_confirmation: block(32, NINE),
-  payment_issue: block(42, NINE),
+  form: block(22, FOUR),
+  payment_confirmation: block(32, FOUR),
+  payment_issue: block(42, FOUR),
   renewal: block(52, NINE),
-  payment: block(62, NINE),
-  cancellation: block(72, NINE),
-  refund: block(82, NINE),
+  payment: block(62, FOUR),
+  cancellation: block(72, FOUR),
+  refund: block(82, FOUR),
+  subdomain_claim: { nl: 2 },
   transfer: {},
   security: {},
   merge: {},
@@ -138,13 +142,14 @@ export const EMAIL_CATEGORY_FALLBACK: Record<EmailCategory, number> = {
   reauthentication: 21,
   confirmation: 21,
   deletion: 21,
-  form: 31,
-  payment_confirmation: 41,
-  payment_issue: 51,
+  form: 0,
+  payment_confirmation: 0,
+  payment_issue: 0,
   renewal: 61,
-  payment: 71,
-  cancellation: 81,
-  refund: 91,
+  payment: 0,
+  cancellation: 0,
+  refund: 0,
+  subdomain_claim: 0,
   transfer: 0,
   security: 0,
   merge: 0,
@@ -165,7 +170,7 @@ export function asEmailLanguage(value: unknown): EmailLanguage {
     .slice(0, 5)
     .replace("_", "-");
   const short = raw.split("-")[0] ?? "";
-  return (EMAIL_LANGUAGES as readonly string[]).includes(short) ? (short as EmailLanguage) : "nl";
+  return (EMAIL_LANGUAGES as readonly string[]).includes(short) ? (short as EmailLanguage) : "en";
 }
 
 function envOverride(name: string): number | null {
@@ -197,7 +202,7 @@ export function globalFallbackTemplateId(): number {
  * Template ID for one category + language, read from the verified table.
  * Env overrides (`BREVO_TEMPLATE_LOGIN_NL`, then `BREVO_TEMPLATE_LOGIN`) win
  * when a Brevo account numbers a template differently. Falls back to the
- * category's Dutch variant, then its category fallback, then 0.
+ * category's English variant, then Dutch, then its category fallback, then 0.
  */
 export function brevoTemplateId(category: EmailCategory, language: unknown): number {
   const lang = asEmailLanguage(language);
@@ -207,8 +212,8 @@ export function brevoTemplateId(category: EmailCategory, language: unknown): num
     envOverride(`BREVO_TEMPLATE_${key}_${lang.toUpperCase()}`) ??
     envOverride(`BREVO_TEMPLATE_${key}`) ??
     table[lang] ??
-    table.nl ??
     table.en ??
+    table.nl ??
     EMAIL_CATEGORY_FALLBACK[category]
   );
 }

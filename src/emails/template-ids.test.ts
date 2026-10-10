@@ -41,10 +41,10 @@ describe("language normalisation", () => {
     expect(asEmailLanguage("fr-BE")).toBe("fr");
     expect(asEmailLanguage("nl_NL")).toBe("nl");
     expect(asEmailLanguage("zh-Hans")).toBe("zh");
-    expect(asEmailLanguage("klingon")).toBe("nl");
-    expect(asEmailLanguage(undefined)).toBe("nl");
-    expect(asEmailLanguage(null)).toBe("nl");
-    expect(asEmailLanguage(42)).toBe("nl");
+    expect(asEmailLanguage("klingon")).toBe("en");
+    expect(asEmailLanguage(undefined)).toBe("en");
+    expect(asEmailLanguage(null)).toBe("en");
+    expect(asEmailLanguage(42)).toBe("en");
   });
 });
 
@@ -85,13 +85,25 @@ describe("brevoTemplateId", () => {
       for (const language of EMAIL_LANGUAGES) {
         const id = brevoTemplateId(category, language);
         if (table[language]) expect(id).toBe(table[language]);
-        else expect(id).toBe(table.nl ?? table.en ?? EMAIL_CATEGORY_FALLBACK[category]);
+        else expect(id).toBe(table.en ?? table.nl ?? EMAIL_CATEGORY_FALLBACK[category]);
       }
     }
   });
 
-  it("defaults to Dutch for unknown languages", () => {
-    expect(brevoTemplateId("login", "xx")).toBe(brevoTemplateId("login", "nl"));
+  it("routes unknown languages to English", () => {
+    expect(brevoTemplateId("login", "xx")).toBe(13);
+  });
+
+  it("follows the master fallback matrix", () => {
+    expect(brevoTemplateId("payment", "pt")).toBe(63);
+    expect(brevoTemplateId("refund", "nl")).toBe(82);
+    expect(brevoTemplateId("cancellation", "de")).toBe(75);
+    expect(brevoTemplateId("renewal", "pt")).toBe(58);
+    expect(reserveTemplateId("renewal")).toBe(61);
+    expect(brevoTemplateId("form", "es")).toBe(23);
+    expect(brevoTemplateId("payment_confirmation", "fr")).toBe(34);
+    expect(brevoTemplateId("payment_issue", "zh")).toBe(43);
+    expect(brevoTemplateId("subdomain_claim", "fr")).toBe(2);
   });
 
   it("resolves to 0 for categories without a Brevo template (inline HTML)", () => {
