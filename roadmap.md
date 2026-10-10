@@ -21,3 +21,4 @@
 - [ ] Vercel env vars confirmed (user action in Vercel)
 - [x] Live Status & Gedachten + Verbindingen & Integraties sections, Spotify Now Playing
 - [ ] Spotify keys (SPOTIFY_CLIENT_ID/SECRET, PSP_ENCRYPTION_KEY) from user
+- [ ] Email as code: React Email + Brevo fallback matrix, OTP auto-submit, link+code in one mail
